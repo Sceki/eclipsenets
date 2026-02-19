@@ -2,7 +2,7 @@
 
 This repository contains the official implementation of the paper:
 
-> [**EclipseNETs: Learning irregular small celestial body silhouettes**  ](https://www.sciencedirect.com/science/article/abs/pii/S0094576525003443)
+> [**EclipseNETs: Learning irregular small celestial body silhouettes**](https://www.sciencedirect.com/science/article/abs/pii/S0094576525003443), 
 > *Acta Astronautica*, 2025.
 
 ## Project Overview
