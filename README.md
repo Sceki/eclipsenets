@@ -1,8 +1,22 @@
-# EclipseNets
+# EclipseNETs: Learning Irregular Small Celestial Body Silhouettes
 
-EclipseNets is a differentiable neural network model for representing and describing the silhouettes of irregular small bodies (e.g., asteroids and comets). Given a viewing direction, EclipseNets predicts the projected silhouette of an irregularly shaped body, enabling gradient-based optimization and integration into differentiable pipelines. This makes it useful for applications such as autonomous spacecraft navigation, shape reconstruction from optical observations, and mission planning in proximity operations around small bodies.
+This repository contains the official implementation of the paper:
 
-This repository contains the code to train and test EclipseNets.
+> **EclipseNETs: Learning irregular small celestial body silhouettes**  
+> *Acta Astronautica*, 2025.[web:30]
+
+## Project Overview
+
+Traditional eclipse modeling for spacecraft trajectory design around asteroids and other irregular small celestial bodies relies on expensive ray-tracing operations against high-fidelity shape models (e.g., polyhedral meshes or spherical harmonics). These methods are computationally prohibitive for real-time applications and large-scale trajectory optimization.
+
+**EclipseNETs** address this challenge by training *differentiable neural networks* to predict irregular **silhouettes** (i.e., the 2D projected shadow of the body as seen from the spacecraft) as a function of spacecraft position and orientation relative to the body's center of mass. The key innovations include:
+
+- **Fully differentiable silhouette prediction**: Enables end-to-end gradient-based optimization of trajectories that account for eclipses.  
+- **Fast inference**: Learned models evaluate in microseconds, enabling also much faster integrations of orbital trajectories with eclipse events.  
+- **High fidelity**: Achieves high accuracy in reproducing the actual eclipse.
+- **Easy integration**: Drop-in replacement for traditional eclipse models in existing trajectory optimization frameworks.
+
+The approach unlocks **differentiable eclipse description** for low-thrust transfers, station-keeping, and proximity operations around small bodies, where accurate shadowing prediction is critical but computationally challenging.[web:30]
 
 ## Citation
 
