@@ -23,11 +23,16 @@ The approach unlocks **differentiable eclipse description** for low-thrust trans
 If you use this work, please cite the following publication:
 
 ```bibtex
-@article{acciarini2025eclipsenets,
-  title={EclipseNETs: Learning irregular small celestial body silhouettes},
-  author={Acciarini, Giacomo and Izzo, Dario and Biscani, Francesco},
-  journal={Acta Astronautica},
-  year={2025},
-  publisher={Elsevier}
+@article{ACCIARINI2025514,
+title = {EclipseNETs: Learning irregular small celestial body silhouettes},
+journal = {Acta Astronautica},
+volume = {236},
+pages = {514-521},
+year = {2025},
+issn = {0094-5765},
+doi = {https://doi.org/10.1016/j.actaastro.2025.06.002},
+url = {https://www.sciencedirect.com/science/article/pii/S0094576525003443},
+author = {Giacomo Acciarini and Dario Izzo and Francesco Biscani},
+keywords = {Small bodies, Silhouette reconstruction, Asteroids, Comets, NeuralODE, Neural events, Machine learning, Artificial intelligence, AI for space, Spaceflight mechanics, Orbital dynamics},
 }
 ```
