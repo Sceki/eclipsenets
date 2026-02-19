@@ -2,8 +2,8 @@
 
 This repository contains the official implementation of the paper:
 
-> **EclipseNETs: Learning irregular small celestial body silhouettes**  
-> *Acta Astronautica*, 2025.[web:30]
+> [**EclipseNETs: Learning irregular small celestial body silhouettes**  ](https://www.sciencedirect.com/science/article/abs/pii/S0094576525003443)
+> *Acta Astronautica*, 2025.
 
 ## Project Overview
 
@@ -16,7 +16,7 @@ Traditional eclipse modeling for spacecraft trajectory design around asteroids a
 - **High fidelity**: Achieves high accuracy in reproducing the actual eclipse.
 - **Easy integration**: Drop-in replacement for traditional eclipse models in existing trajectory optimization frameworks.
 
-The approach unlocks **differentiable eclipse description** for low-thrust transfers, station-keeping, and proximity operations around small bodies, where accurate shadowing prediction is critical but computationally challenging.[web:30]
+The approach unlocks **differentiable eclipse description** for low-thrust transfers, station-keeping, and proximity operations around small bodies, where accurate shadowing prediction is critical but computationally challenging.
 
 ## Citation
 
