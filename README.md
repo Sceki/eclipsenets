@@ -10,11 +10,10 @@ If you use this work, please cite the following publication:
 
 ```bibtex
 @article{acciarini2025eclipsenets,
-  title   = {{EclipseNets}: a differentiable model for irregular small body silhouettes description},
-  author  = {Acciarini, Giacomo},
-  journal = {Acta Astronautica},
-  year    = {2025},
-  publisher = {Elsevier},
-  url     = {https://www.sciencedirect.com/science/article/abs/pii/S0094576525003443}
+  title={EclipseNETs: Learning irregular small celestial body silhouettes},
+  author={Acciarini, Giacomo and Izzo, Dario and Biscani, Francesco},
+  journal={Acta Astronautica},
+  year={2025},
+  publisher={Elsevier}
 }
 ```
