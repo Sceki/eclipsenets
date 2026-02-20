@@ -5,7 +5,7 @@ from scipy.spatial.distance import cdist
 from typing import Union, Optional, Tuple
 
 from . import is_intersecting_v2, ray_triangle_intersect
-from ._utils import sort_points_along_boundary
+from .utils import sort_points_along_boundary
 
 
 def compute_eclipse_function(

@@ -9,29 +9,29 @@ from .ray_tracing import (
     is_outside_v1, 
     is_outside_v2
 )
-# from ._plots import (
-#     plot_mesh_vertices, 
-#     plot_ray, 
-#     plot_intersecting_triangles
-# )
+from .plots import (
+    plot_mesh_vertices, 
+    plot_ray, 
+    plot_intersecting_triangles
+)
 from .eclipse_function import (
     eclipse_function, 
     compute_eclipse_function
 )
-# from ._sampling import (
-#     fibonacci_sphere, 
-#     sample_points
-# )
-# from ._utils import (
-#     cart2spherical, 
-#     project_on_plane, 
-#     plane_to_3D, 
-#     sph2cart, 
-#     project_to_2d, 
-#     alpha_shape, 
-#     sort_points_along_boundary, 
-#     nearest_neighbor
-# )
+from .sampling import (
+    fibonacci_sphere, 
+    sample_points
+)
+from .utils import (
+    cart2spherical, 
+    project_on_plane, 
+    plane_to_3D, 
+    sph2cart, 
+    project_to_2d, 
+    alpha_shape, 
+    sort_points_along_boundary, 
+    nearest_neighbor
+)
 from .nn import (
     SIREN, 
     weights_and_biases_heyoka, 
