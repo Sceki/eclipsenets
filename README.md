@@ -14,7 +14,7 @@ Traditional eclipse modeling for spacecraft trajectory design around asteroids a
 - **Fully differentiable silhouette prediction**: Enables end-to-end gradient-based optimization of trajectories that account for eclipses.  
 - **Fast inference**: Learned models evaluate in microseconds, enabling also much faster integrations of orbital trajectories with eclipse events.  
 - **High fidelity**: Achieves high accuracy in reproducing the actual eclipse.
-- **Easy integration**: Drop-in replacement for traditional eclipse models in existing trajectory optimization frameworks.
+- **Integration with Taylor-based integrator**: they can be used as event detection functions inside Taylor propagators, enabling differentiable and reliable event detection.
 
 The approach unlocks **differentiable eclipse description** for low-thrust transfers, station-keeping, and proximity operations around small bodies, where accurate shadowing prediction is critical but computationally challenging.
 
