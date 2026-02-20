@@ -1,5 +1,5 @@
 # EclipseNETs: Learning Irregular Small Celestial Body Silhouettes
-
+![4](https://github.com/user-attachments/assets/5c8f3a8b-8a3e-47ad-8033-7ad31ed968db)
 This repository contains the official implementation of the paper:
 
 > [**EclipseNETs: Learning irregular small celestial body silhouettes**](https://www.sciencedirect.com/science/article/abs/pii/S0094576525003443), 
@@ -17,6 +17,9 @@ Traditional eclipse modeling for spacecraft trajectory design around asteroids a
 - **Integration with Taylor-based integrator**: they can be used as event detection functions inside Taylor propagators, enabling differentiable and reliable event detection.
 
 The approach unlocks **differentiable eclipse description** for low-thrust transfers, station-keeping, and proximity operations around small bodies, where accurate shadowing prediction is critical but computationally challenging.
+
+<img width="6600" height="5400" alt="fig" src="https://github.com/user-attachments/assets/cbb4f493-f209-443d-b334-e4ed60d46776" />
+
 
 ## Citation
 
