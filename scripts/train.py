@@ -56,8 +56,6 @@ class TrainingConfig:
 
 
 class EclipseDataset(Dataset):
-    """PyTorch Dataset for eclipse function data"""
-
     def __init__(self, data: np.ndarray):
         """
         Args:
