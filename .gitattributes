@@ -1,0 +1,13 @@
+datasets/chu-ger_db_2349414_L=5002.5703125.pk filter=lfs diff=lfs merge=lfs -text
+datasets/chu-ger_db_2349414_L=5002.5703125_larger_train.pk filter=lfs diff=lfs merge=lfs -text
+datasets/chu-ger_db_939678_L=5002.5703125_valid.pk filter=lfs diff=lfs merge=lfs -text
+datasets/eros_db_2267612_L=32.66218376159668.pk filter=lfs diff=lfs merge=lfs -text
+datasets/itokawa_db_2257300_L=0.5607019066810608.pk filter=lfs diff=lfs merge=lfs -text
+datasets/bennu_db_2248740_L=0.5634379088878632_larger_train.pk filter=lfs diff=lfs merge=lfs -text
+datasets/bennu_db_2265340_L=0.5634379088878632.pk filter=lfs diff=lfs merge=lfs -text
+datasets/eros_db_2267612_L=32.66218376159668_larger_train.pk filter=lfs diff=lfs merge=lfs -text
+datasets/eros_db_907150_L=32.66218376159668_valid.pk filter=lfs diff=lfs merge=lfs -text
+datasets/itokawa_db_2342882_L=0.5607019066810608_larger_train.pk filter=lfs diff=lfs merge=lfs -text
+datasets/itokawa_db_936602_L=0.5607019066810608_valid.pk filter=lfs diff=lfs merge=lfs -text
+datasets/bennu_db_2248220_L=0.5634379088878632_larger_train.pk filter=lfs diff=lfs merge=lfs -text
+datasets/bennu_db_899424_L=0.5634379088878632_valid.pk filter=lfs diff=lfs merge=lfs -text
