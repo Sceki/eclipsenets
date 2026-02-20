@@ -2,15 +2,13 @@ import os
 import torch
 import warnings
 
-# Core module imports
-from . import test
-# from ._ray_tracing import (
-#     is_intersecting_v1, 
-#     is_intersecting_v2, 
-#     ray_triangle_intersect, 
-#     is_outside_v1, 
-#     is_outside_v2
-# )
+from .ray_tracing import (
+    is_intersecting_v1, 
+    is_intersecting_v2, 
+    ray_triangle_intersect, 
+    is_outside_v1, 
+    is_outside_v2
+)
 # from ._plots import (
 #     plot_mesh_vertices, 
 #     plot_ray, 
