@@ -17,8 +17,8 @@ Traditional eclipse modeling for spacecraft trajectory design around asteroids a
 - **Integration with Taylor-based integrator**: they can be used as event detection functions inside Taylor propagators, enabling differentiable and reliable event detection.
 
 The approach unlocks **differentiable eclipse description** for low-thrust transfers, station-keeping, and proximity operations around small bodies, where accurate shadowing prediction is critical but computationally challenging.
+![7](https://github.com/user-attachments/assets/1516c65e-e3bf-4229-b788-98d509a70c92)
 
-<img width="6600" height="5400" alt="fig" src="https://github.com/user-attachments/assets/cbb4f493-f209-443d-b334-e4ed60d46776" />
 
 
 ## Citation
