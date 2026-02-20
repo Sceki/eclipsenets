@@ -4,40 +4,40 @@ import warnings
 
 # Core module imports
 from . import test
-from ._ray_tracing import (
-    is_intersecting_v1, 
-    is_intersecting_v2, 
-    ray_triangle_intersect, 
-    is_outside_v1, 
-    is_outside_v2
-)
-from ._plots import (
-    plot_mesh_vertices, 
-    plot_ray, 
-    plot_intersecting_triangles
-)
-from ._eclipse_function import (
+# from ._ray_tracing import (
+#     is_intersecting_v1, 
+#     is_intersecting_v2, 
+#     ray_triangle_intersect, 
+#     is_outside_v1, 
+#     is_outside_v2
+# )
+# from ._plots import (
+#     plot_mesh_vertices, 
+#     plot_ray, 
+#     plot_intersecting_triangles
+# )
+from .eclipse_function import (
     eclipse_function, 
     compute_eclipse_function
 )
-from ._sampling import (
-    fibonacci_sphere, 
-    sample_points
-)
-from ._utils import (
-    cart2spherical, 
-    project_on_plane, 
-    plane_to_3D, 
-    sph2cart, 
-    project_to_2d, 
-    alpha_shape, 
-    sort_points_along_boundary, 
-    nearest_neighbor
-)
-from ._nn import (
-    Siren, 
+# from ._sampling import (
+#     fibonacci_sphere, 
+#     sample_points
+# )
+# from ._utils import (
+#     cart2spherical, 
+#     project_on_plane, 
+#     plane_to_3D, 
+#     sph2cart, 
+#     project_to_2d, 
+#     alpha_shape, 
+#     sort_points_along_boundary, 
+#     nearest_neighbor
+# )
+from .nn import (
+    SIREN, 
     weights_and_biases_heyoka, 
-    ffnn
+    FFNN
 )
 
 # Device management (modern PyTorch approach)
