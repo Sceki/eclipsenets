@@ -1,19 +1,17 @@
 name: eclipsenets
 channels:
-  - pytorch
   - conda-forge
 dependencies:
-  - python
-  - heyoka.py
+  - python>=3.10
+  - numpy
   - scipy
+  - shapely>=2.0
   - matplotlib
   - tqdm
-  - jupyter
+  - heyoka.py>=7.0
   - pytorch
-  - torchvision
-  - torchaudio
-  - pyvista
-  - shapely
+  - jupyterlab
+  - nbconvert
+  - pytest
+  - git-lfs
   - pip
-  - pip:
-      - tetgen
