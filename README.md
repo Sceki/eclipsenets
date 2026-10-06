@@ -27,7 +27,7 @@ The approach unlocks **differentiable eclipse description** for proximity operat
 conda env create -f environment.yml
 conda activate eclipsenets
 pip install -e .
-git lfs pull   # downloads the datasets (about 1.3 GB)
+git lfs pull   # download the datasets (about 1.3 GB)
 ```
 
 The shape models, the mascon models and the trained networks are part of the repository. The datasets are stored with [git lfs](https://git-lfs.com): they are needed to train the networks and to reproduce Table 2 and Figure 3, not to use the trained networks.
