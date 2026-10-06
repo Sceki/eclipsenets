@@ -57,6 +57,7 @@ Thumbs.db
 logs/
 
 # Data files
+datasets/generated/
 *.csv
 *.tsv
 *.npy
