@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eclipsenets"
+version = "0.1.0"
+description = "EclipseNETs: learning irregular small celestial body silhouettes"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "scipy",
+    "shapely>=2.0",
+    "matplotlib",
+    "tqdm",
+    "torch",
+    "heyoka>=7.0",
+]
+
+# The shape models, mascon models, datasets and networks are read from the
+# repository the package sits in: install it in editable mode (pip install -e .).
+[tool.setuptools]
+packages = ["eclipsenets"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
