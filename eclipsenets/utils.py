@@ -1,6 +1,25 @@
+"""Coordinate conventions and projections shared by the whole library.
+
+A Sun direction ``s`` is described by its azimuth ``az`` and its polar angle
+``el`` (measured from +z, so it is a colatitude; it is called "elevation" in
+the rest of the code and in the paper)::
+
+    s = [sin(el) cos(az), sin(el) sin(az), cos(el)]
+
+The plane orthogonal to ``s`` is spanned by::
+
+    U = [-sin(az), cos(az), 0]
+    V = [cos(az) cos(el), sin(az) cos(el), -sin(el)]
+
+and an EclipseNET takes as input ``[cos(az), sin(az), cos(el), sin(el), X, Y]``
+with ``X = r . U`` and ``Y = r . V``.
+
+The azimuth is undefined for a Sun direction along the z axis (it is taken as
+zero). The orientation of the plane changes abruptly around that direction,
+and the networks are less accurate there.
+"""
 import numpy as np
-from scipy.spatial import Delaunay
-from scipy.spatial.distance import euclidean
+from scipy.spatial import cKDTree
 
 
 def cart2spherical(points):
@@ -15,12 +34,48 @@ def cart2spherical(points):
     Returns:
         (., 3) np.array: array with columns containing r, theta, phi
     """
-    points = np.array(points).reshape(-1, 3)
+    points = np.array(points, dtype=float).reshape(-1, 3)
     r = np.linalg.norm(points, axis=1)
-    phi = np.arccos(points[:, 2] / r)
-    # phi=np.arctan2(points[:,2],np.sqrt(points[:,0]**2+points[:,1]**2))
+    # the clip guards against |z / r| exceeding 1 by a rounding error
+    phi = np.arccos(np.clip(points[:, 2] / r, -1.0, 1.0))
     theta = np.arctan2(points[:, 1], points[:, 0])
-    return (np.array([r, theta, phi]).transpose())
+    return np.array([r, theta, phi]).transpose()
+
+
+def sph2cart(az, el, rad=False):
+    """
+    This converts angles in azimuth (between 0-360) and elevation (between 0-180) to a 3D vector.
+
+    Args:
+        az (float): azimuth angle in degrees
+        el (float): elevation angle in degrees (polar angle, measured from +z)
+        rad (bool): if True, the angles are in radians
+
+    Returns:
+        (3,) np.array: 3D vector
+    """
+    if not rad:
+        az = np.radians(az)
+        el = np.radians(el)
+    x = np.sin(el) * np.cos(az)
+    y = np.sin(el) * np.sin(az)
+    z = np.cos(el)
+    return np.array([x, y, z])
+
+
+def plane_basis(ray_d):
+    """Orthonormal basis (U, V) of the plane orthogonal to a direction.
+
+    Args:
+        ray_d (3D np.array): direction of the ray (does not need to be normalized).
+
+    Returns:
+        (np.array, np.array): the unit vectors U and V, each of shape (3,)
+    """
+    _, theta, phi = cart2spherical(ray_d)[0, :]
+    U = np.array([-np.sin(theta), np.cos(theta), 0.0])
+    V = np.array([np.cos(theta) * np.cos(phi), np.sin(theta) * np.cos(phi), -np.sin(phi)])
+    return U, V
 
 
 def project_on_plane(points, ray_d):
@@ -33,51 +88,15 @@ def project_on_plane(points, ray_d):
     Returns:
         (np.array, np.array): X an Y coordinates on the plane
     """
-    # Convert direction to spherical
-    r, theta, phi = cart2spherical(ray_d)[0, :]
-    # Define the basis on the sphere surface
-    U = np.array([-np.sin(theta), np.cos(theta), 0])
-    V = np.array([np.cos(theta) * np.cos(phi), np.sin(theta) * np.cos(phi), -np.sin(phi)])
-    # Compute the projection
+    U, V = plane_basis(ray_d)
     X = np.dot(points, U)
     Y = np.dot(points, V)
     return X, Y
 
 
-def sph2cart(az, el, rad=False):
-    """
-    This converts angles in azimuth (between 0-360) and elevation (between 0-180) to a 3D vector.
-
-    Args:
-        azimuth (float): azimuth angle in degrees
-        elevation (float): elevation angle in degrees
-        rad (bool): if True, the angles are in radians 
-
-    Returns:
-        (3,) np.array: 3D vector
-    """
-    if rad != True:
-        az = np.radians(az)
-        el = np.radians(el)
-    x = np.sin(el) * np.cos(az)
-    y = np.sin(el) * np.sin(az)
-    z = np.cos(el)
-    return np.array([x, y, z])
-
-
 def project_to_2d(points, view_dir):
-    # Calculate the orthonormal basis vectors
-    z_axis = view_dir / np.linalg.norm(view_dir)
-    x_axis = np.array([-z_axis[1], z_axis[0], 0])
-    x_axis /= np.linalg.norm(x_axis)
-    y_axis = np.cross(z_axis, x_axis)
-
-    # Projection matrix
-    projection_matrix = np.array([x_axis, y_axis])
-
-    # Project points
-    points_2d = points @ projection_matrix.T
-    return points_2d
+    """Same projection as :func:`project_on_plane`, returned as one (., 2) array."""
+    return np.stack(project_on_plane(points, view_dir), axis=-1)
 
 
 def plane_to_3D(X, Y, ray_d, offset):
@@ -92,122 +111,87 @@ def plane_to_3D(X, Y, ray_d, offset):
     Returns:
         (., 3) np.array: cartesian points
     """
-    assert(type(offset) is float)
-    n = len(X)
-    # Convert direction to spherical
-    r, theta, phi = cart2spherical(ray_d)[0, :]
-    # Define the basis on the sphere surface
-    U = np.array([-np.sin(theta), np.cos(theta), 0])
-    V = np.array([np.cos(theta) * np.cos(phi), np.sin(theta) * np.cos(phi), -np.sin(phi)])
-    # Compute the 3D points
-    points = (np.tile(X, (3, 1)) * U.reshape(3, 1)).transpose()
-    points += (np.tile(Y, (3, 1)) * V.reshape(3, 1)).transpose()
-    points += np.tile(ray_d, (n, 1)) * offset
-    return points
+    X = np.atleast_1d(np.asarray(X, dtype=float))
+    Y = np.atleast_1d(np.asarray(Y, dtype=float))
+    ray_d = np.asarray(ray_d, dtype=float)
+    U, V = plane_basis(ray_d)
+    return X[:, None] * U + Y[:, None] * V + float(offset) * ray_d / np.linalg.norm(ray_d)
 
 
-def alpha_shape(points, alpha, only_outer=True):
-    """
-    Compute the alpha shape (concave hull) of a set of points.
+def encode_direction(az, el):
+    """Sun-direction part of the network input: [cos(az), sin(az), cos(el), sin(el)].
 
     Args:
-        points (np.array of shape (n,2)): points.
-        alpha (float): alpha value.
-        only_outer (bool): specifies if we keep only the outer border
-            or also inner edges.
+        az (float or np.array): azimuth, in radians
+        el (float or np.array): elevation (polar angle from +z), in radians
 
     Returns:
-        set of (i,j) pairs representing edges of the alpha-shape. (i,j) are
-        the indices in the points array.
+        (..., 4) np.array
     """
-    assert points.shape[0] > 3, "Need at least four points"
-    assert points.shape[1] == 2, "Need two dimensional points"
-
-    def add_edge(edges, i, j):
-        """
-        Add a line between the i-th and j-th points,
-        if not in the list already
-        """
-        if (i, j) in edges or (j, i) in edges:
-            # already added
-            assert (j, i) in edges, "Can't go twice over same directed edge right?"
-            if only_outer:
-                # if both neighboring triangles are in shape, it's not a boundary edge
-                edges.remove((j, i))
-            return
-        edges.add((i, j))
-
-    tri = Delaunay(points)
-    edges = set()
-    # Loop over triangles:
-    # ia, ib, ic = indices of corner points of the triangle
-    for ia, ib, ic in tri.simplices:
-        pa = points[ia]
-        pb = points[ib]
-        pc = points[ic]
-        # Computing radius of triangle circumcircle
-        # [www.mathalino.com/reviewer/derivation-of-formulas/derivation-of-formula-for-radius-of-circumcircle]
-        a = np.sqrt((pa[0] - pb[0]) ** 2 + (pa[1] - pb[1]) ** 2)
-        b = np.sqrt((pb[0] - pc[0]) ** 2 + (pb[1] - pc[1]) ** 2)
-        c = np.sqrt((pc[0] - pa[0]) ** 2 + (pc[1] - pa[1]) ** 2)
-        s = (a + b + c) / 2.0
-        area = np.sqrt(s * (s - a) * (s - b) * (s - c))
-        circum_r = a * b * c / (4.0 * area)
-        if circum_r < alpha:
-            add_edge(edges, ia, ib)
-            add_edge(edges, ib, ic)
-            add_edge(edges, ic, ia)
-    return edges
+    az, el = np.broadcast_arrays(np.asarray(az, dtype=float), np.asarray(el, dtype=float))
+    return np.stack([np.cos(az), np.sin(az), np.cos(el), np.sin(el)], axis=-1)
 
 
-def calculate_centroid(points):
-    x_coords = [point[0] for point in points]
-    y_coords = [point[1] for point in points]
-    centroid_x = sum(x_coords) / len(points)
-    centroid_y = sum(y_coords) / len(points)
-    return (centroid_x, centroid_y)
+def network_inputs(positions, sun_direction):
+    """Network inputs for spacecraft positions and a Sun direction.
 
+    Args:
+        positions ((3,) or (N, 3) np.array): spacecraft positions, in units of L
+        sun_direction ((3,) np.array): direction of the Sun
 
-def calculate_angle(point, centroid):
-    dx = point[0] - centroid[0]
-    dy = point[1] - centroid[1]
-    return np.arctan2(dy, dx)
+    Returns:
+        (6,) or (N, 6) np.array: [cos(az), sin(az), cos(el), sin(el), X, Y]
+    """
+    positions = np.asarray(positions, dtype=float)
+    _, az, el = cart2spherical(sun_direction)[0, :]
+    X, Y = project_on_plane(positions, sun_direction)
+    angles = np.broadcast_to(encode_direction(az, el), np.shape(X) + (4,))
+    return np.concatenate([angles, np.stack([X, Y], axis=-1)], axis=-1)
 
 
 def sort_points_along_boundary(points):
-    centroid = calculate_centroid(points)
-    angles = [calculate_angle(point, centroid) for point in points]
-    sorted_indices = np.argsort(angles)
-    sorted_points = [points[i] for i in sorted_indices]
-    return sorted_points
+    """Sorts 2D points by their polar angle around the centroid.
+
+    This orders a boundary correctly only if the region is star-shaped with
+    respect to its centroid: it is wrong for concave silhouettes such as the
+    ones of 67P. See :func:`eclipsenets.silhouette_polygon` for a robust way of
+    getting an ordered silhouette.
+    """
+    points = np.asarray(points)
+    centroid = points.mean(axis=0)
+    angles = np.arctan2(points[:, 1] - centroid[1], points[:, 0] - centroid[0])
+    return list(points[np.argsort(angles)])
 
 
 def nearest_neighbor(points):
-    # Initialize variables
+    """Greedy nearest-neighbour ordering of points, starting from the first one.
+
+    This is a heuristic: it can jump across narrow necks and leave points
+    behind, so the resulting polygon is not guaranteed to be simple. See
+    :func:`eclipsenets.silhouette_polygon` for a robust way of getting an
+    ordered silhouette.
+    """
+    points = np.asarray(points)
     n = len(points)
-    visited = [False] * n
-    sorted_points = []
-
-    # Start from the first point
-    current_index = 0
-
-    # Iterate until all points are visited
-    while len(sorted_points) < n:
-        # Add current point to the sorted list
-        sorted_points.append(points[current_index])
-        visited[current_index] = True
-
-        # Find the nearest neighbor to the current point
-        nearest_dist = float('inf')
-        nearest_index = -1
-        for i, point in enumerate(points):
-            if not visited[i]:
-                dist = euclidean(points[current_index], point)
-                if dist < nearest_dist:
-                    nearest_dist = dist
-                    nearest_index = i
-
-        # Move to the nearest neighbor
-        current_index = nearest_index
-
-    return sorted_points
+    tree = cKDTree(points)
+    visited = np.zeros(n, dtype=bool)
+    order = np.empty(n, dtype=int)
+    current = 0
+    for i in range(n):
+        order[i] = current
+        visited[current] = True
+        if i == n - 1:
+            break
+        # Query a growing neighbourhood until it contains an unvisited point.
+        k = 8
+        while True:
+            _, idx = tree.query(points[current], k=min(k, n))
+            idx = np.atleast_1d(idx)
+            candidates = idx[~visited[idx]]
+            if len(candidates) > 0:
+                current = candidates[0]
+                break
+            if k >= n:
+                raise RuntimeError("no unvisited point left")
+            k *= 4
+    return list(points[order])
