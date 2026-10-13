@@ -1,4 +1,6 @@
 # EclipseNETs: Learning Irregular Small Celestial Body Silhouettes
+[![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.actaastro.2025.06.002-blue)](https://doi.org/10.1016/j.actaastro.2025.06.002)
+
 ![4](https://github.com/user-attachments/assets/5c8f3a8b-8a3e-47ad-8033-7ad31ed968db)
 This repository contains the official implementation of the paper:
 
